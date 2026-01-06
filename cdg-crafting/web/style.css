@@ -1,0 +1,519 @@
+html, body {
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+#root { background: transparent !important; }
+
+:root{
+  --bg: rgba(8,10,14,.28);
+  --panel: rgba(18,22,30,.55);
+  --panel2: rgba(18,22,30,.40);
+  --border: rgba(255,255,255,.10);
+  --border2: rgba(255,255,255,.06);
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.60);
+  --accent: #20D7B7;
+  --danger: #ff5c5c;
+  --good: #3ddc97;
+}
+
+*{ box-sizing:border-box; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+body{ margin:0; background:transparent; color:var(--text); }
+.hidden{ display:none !important; }
+
+#app{
+  position:fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.panel{
+  width:min(1200px, 94vw);
+  height:min(760px, 88vh);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow: 0 30px 120px rgba(0,0,0,.65);
+  overflow:hidden;
+}
+
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 18px;
+  border-bottom: 1px solid var(--border2);
+  background: rgba(0,0,0,.14);
+}
+
+.title{
+  font-size:14px;
+  letter-spacing:.12em;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.bench{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.btn{
+  padding:10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.05);
+  color: var(--text);
+  cursor:pointer;
+  transition: transform .08s ease, border-color .12s ease, background .12s ease;
+}
+.btn:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.07); }
+.btn:active{ transform: translateY(1px); }
+.btn.primary{
+  border-color: rgba(32,215,183,.35);
+  background: rgba(32,215,183,.12);
+}
+.btn.primary:hover{ border-color: rgba(32,215,183,.55); background: rgba(32,215,183,.16); }
+.btn:disabled{ opacity:.45; cursor:not-allowed; }
+
+.content{
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  height: calc(100% - 62px);
+}
+
+.left{
+  padding:16px;
+  border-right: 1px solid var(--border2);
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  overflow:hidden;
+}
+
+.searchRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+/* Skill XP bars (per category) */
+.skillsBar{
+  border-radius: 16px;
+  border: 1px solid var(--border2);
+  background: rgba(0,0,0,.18);
+  padding: 12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.skillRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:10px;
+}
+
+.skillName{
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color: rgba(255,255,255,.72);
+  font-weight:850;
+}
+
+.skillLv{
+  font-size:12px;
+  color: rgba(255,255,255,.60);
+}
+
+/* XP Bar container */
+.skillTrack{
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  overflow: hidden;
+}
+
+/* XP Bar fill */
+.skillFill{
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    #20D7B7,
+    #4AF3D1
+  );
+  border-radius: 999px;
+  box-shadow:
+    0 0 8px rgba(32,215,183,0.6),
+    0 0 18px rgba(32,215,183,0.35);
+  transition: width 220ms ease;
+}
+
+
+.skillSub{
+  margin-top:6px;
+  font-size:11px;
+  color: rgba(255,255,255,.55);
+}
+
+.input{
+  width:100%;
+  padding:12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,.18);
+  color: var(--text);
+  outline:none;
+}
+.input:focus{ border-color: rgba(32,215,183,.55); }
+
+.grid{
+  overflow:auto;
+  padding-right:6px;
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap:10px;
+}
+
+.recipeCard{
+  border-radius: 14px;
+  border: 1px solid var(--border2);
+  background: rgba(0,0,0,.18);
+  padding:10px;
+  position:relative;
+  transition: transform .10s ease, border-color .12s ease, background .12s ease;
+  min-height: 92px;
+}
+.recipeCard:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.16);
+  background: rgba(0,0,0,.22);
+}
+.recipeCard.selected{
+  border-color: rgba(32,215,183,.65);
+  box-shadow: 0 0 0 2px rgba(32,215,183,.10) inset;
+}
+
+/* stronger craftable/blocked states */
+.recipeCard.craftable{
+  box-shadow:
+    0 0 0 1px rgba(61,220,151,.16) inset,
+    0 14px 42px rgba(61,220,151,.08);
+}
+
+.recipeCard.blocked{
+  box-shadow:
+    0 0 0 1px rgba(255,92,92,.14) inset,
+    0 14px 42px rgba(255,92,92,.06);
+}
+
+.iconBox{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  border:1px solid var(--border2);
+  background: rgba(255,255,255,.04);
+}
+
+.recipeName{
+  margin-top:10px;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.15;
+}
+
+.countBadge{
+  position:absolute;
+  top:8px; right:8px;
+  min-width:22px;
+  height:22px;
+  padding:0 7px;
+  border-radius:999px;
+  border:1px solid var(--border2);
+  background: rgba(0,0,0,.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  color: var(--muted);
+}
+
+.stateStripe{
+  position:absolute;
+  inset:0;
+  border-radius:14px;
+  pointer-events:none;
+  opacity:0;
+}
+.recipeCard.blocked .stateStripe{
+  opacity:1;
+  box-shadow: inset 0 0 0 999px rgba(255,92,92,.06);
+}
+.recipeCard.craftable .stateStripe{
+  opacity:1;
+  box-shadow: inset 0 0 0 999px rgba(61,220,151,.06);
+}
+
+.right{
+  padding:16px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.card{
+  border-radius: 16px;
+  border: 1px solid var(--border2);
+  background: rgba(0,0,0,.18);
+  padding:14px;
+}
+
+.detailsTitle{
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+
+.metaRow{
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.pill{
+  padding:6px 10px;
+  border-radius: 12px;
+  border:1px solid var(--border2);
+  background: rgba(0,0,0,.22);
+  color: var(--text);
+  font-size:12px;
+}
+
+.pill.warn{ border-color: rgba(245,196,81,.28); color: rgba(245,196,81,.95); }
+.pill.bad{ border-color: rgba(255,92,92,.28); color: rgba(255,92,92,.95); }
+.pill.good{ border-color: rgba(61,220,151,.28); color: rgba(61,220,151,.95); }
+
+.sectionTitle{
+  margin-top:12px;
+  font-size:12px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  color: var(--muted);
+}
+
+/* Hide any leftover time/xp info chips if present in older HTML */
+#detailsTime, #totalXp, #totalTime{ display:none !important; }
+
+.reqList{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+.reqItem{
+  border-radius: 999px;
+  border:1px solid var(--border2);
+  background: rgba(0,0,0,.22);
+  padding:7px 10px;
+  font-size:12px;
+  color: var(--muted);
+}
+.reqItem.ok{ color: var(--good); border-color: rgba(61,220,151,.25); }
+.reqItem.bad{ color: var(--danger); border-color: rgba(255,92,92,.25); }
+
+.qtyRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:10px;
+}
+.qtyBtn{ width:44px; display:flex; justify-content:center; }
+.qtyValue{
+  flex:1;
+  text-align:center;
+  padding:10px 12px;
+  border-radius: 14px;
+  border:1px solid var(--border);
+  background: rgba(0,0,0,.18);
+}
+
+.queueHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+}
+
+.queueList{ display:flex; flex-direction:column; gap:8px; max-height: 220px; overflow:auto; padding-right: 6px; }
+
+.queueItem{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-radius: 14px;
+  border: 1px solid var(--border2);
+  background: rgba(0,0,0,.22);
+  padding:10px 12px;
+  color: var(--muted);
+  font-size:12px;
+}
+
+.queueName{ color: var(--text); font-weight:800; }
+
+.progressWrap{
+  height:8px;
+  border-radius:999px;
+  border:1px solid var(--border2);
+  background: rgba(0,0,0,.25);
+  overflow:hidden;
+  margin-top:10px;
+}
+.progressFill{
+  height:100%;
+  border-radius:999px;
+  background: rgba(32,215,183,.28);
+  width:0%;
+}
+
+/* ============================
+   states + icons
+   ============================ */
+
+.recipeTopRow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.leftTop{display:flex;gap:10px;align-items:center;min-width:0}
+.rightTop{display:flex;gap:8px;align-items:center}
+
+.recipeIconWrap{
+  width:44px;height:44px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.25);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;flex:0 0 auto;
+}
+.recipeIcon{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+
+.recipeText{display:flex;flex-direction:column;gap:2px;min-width:0}
+.recipeSub{font-size:11px;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.miniIngRow{display:flex;gap:6px;flex-wrap:nowrap;overflow:hidden;margin-top:10px}
+.miniIngIcon{
+  width:22px;height:22px;object-fit:contain;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.25);
+  padding:3px;
+}
+
+/* Queue badge + lock pill */
+.queueBadge{
+  min-width:24px;height:24px;padding:0 8px;
+  border-radius:999px;
+  border:1px solid rgba(32,215,183,.45);
+  background: rgba(32,215,183,.12);
+  display:flex;align-items:center;justify-content:center;
+  color: rgba(255,255,255,.88);
+  font-size:12px;font-weight:800;
+}
+.lockPill{
+  width:24px;height:24px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.38);
+  display:flex;align-items:center;justify-content:center;
+}
+.lockIcon{font-size:12px;opacity:.85}
+
+/* Clearer craftable / blocked colors */
+.recipeCard.craftable{
+  box-shadow:
+    0 0 0 1px rgba(61,220,151,.18) inset,
+    0 12px 40px rgba(61,220,151,.06);
+}
+.recipeCard.blocked{
+  box-shadow:
+    0 0 0 1px rgba(255,92,92,.16) inset,
+    0 12px 40px rgba(255,92,92,.05);
+}
+.recipeCard.locked{
+  filter: saturate(.92);
+}
+
+/* Make recipe text readable */
+.recipeName{color:rgba(255,255,255,.88);text-shadow:0 1px 2px rgba(0,0,0,.65)}
+
+/* Requirements list with icons */
+.reqList{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.reqItem{
+  display:flex;align-items:center;gap:8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  padding:7px 10px;
+}
+.reqItem.ok{border-color: rgba(61,220,151,.22)}
+.reqItem.bad{border-color: rgba(255,92,92,.22)}
+
+.reqIcon{
+  width:26px;height:26px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.25);
+  padding:4px;object-fit:contain;flex:0 0 auto;
+}
+.reqText{display:flex;flex-direction:column;line-height:1.05}
+.reqName{font-size:12px;font-weight:800;color:rgba(255,255,255,.86)}
+.reqCount{font-size:11px;color:rgba(255,255,255,.58)}
+
+
+
+/* =========================
+   Open/Close Animations + Vignette + Darker Overlay
+   ========================= */
+
+#app{
+  /* Darker overlay (tweak alpha to taste) */
+  background: rgba(8, 10, 14, .80) !important;
+
+  /* Fade in/out */
+  opacity: 0;
+  transform: translateY(6px) scale(0.995);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+/* When UI is opened */
+#app.is-open{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Vignette edge darkening */
+#app::before{
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  /* subtle vignette */
+  background: radial-gradient(ellipse at center,
+    rgba(0,0,0,0.00) 0%,
+    rgba(0,0,0,0.15) 45%,
+    rgba(0,0,0,0.45) 100%);
+}
+
+/* Optional: slightly increase vignette on open for a smoother feel */
+#app.is-open::before{
+  opacity: 1;
+  transition: opacity 180ms ease;
+}

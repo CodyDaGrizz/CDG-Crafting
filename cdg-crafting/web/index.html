@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>cdg-crafting</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style id="forceTransparent">
+    html, body, #root { background: transparent !important; }
+    body { margin:0 !important; overflow:hidden !important; }
+  </style>
+
+</head>
+<body>
+  <div id="app" class="hidden" style="display:none;">
+    <div class="panel">
+      <div class="topbar">
+        <div>
+          <div class="title">RECIPES</div>
+          <div class="subtitle" id="benchSubtitle">...</div>
+        </div>
+        <div class="topActions">
+          <button class="btn" id="refreshBtn">Refresh</button>
+          <button class="btn ghost" id="closeBtn">Close</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="left">
+          <div class="searchRow">
+            <input id="search" class="input" placeholder="Search recipes..." />
+            <button class="iconBtn" id="clearSearch" title="Clear">✕</button>
+          </div>
+
+          <div id="skillsBar" class="skillsBar"></div>
+
+          <div class="grid" id="recipeGrid"></div>
+        </div>
+
+        <div class="right">
+          <div class="details">
+            <div class="detailsCard" id="detailsCard">
+              <div class="detailsTitle" id="detailsTitle">Select a recipe</div>
+              <div class="metaRow" id="detailsMetaRow">
+                <span class="pill" id="detailsReq">Select a recipe</span>
+              </div>
+
+              <div class="sectionTitle">Items Required</div>
+              <div class="reqList" id="reqList"></div>
+
+              <div class="sectionTitle">Quantity</div>
+              <div class="qtyRow">
+                <button class="btn qtyBtn" id="qtyMinus">-</button>
+                <div class="qtyValue" id="qtyValue">1</div>
+                <button class="btn qtyBtn" id="qtyPlus">+</button>
+                <button class="btn" id="qtyMax">Max</button>
+              </div>
+
+              <div class="actionsRow">
+                <button class="btn primary" id="addQueueBtn" disabled>ADD TO QUEUE</button>
+              </div>
+            </div>
+
+            <div class="queueCard">
+              <div class="queueTop">
+                <div class="sectionTitle" style="margin:0;">Queue</div>
+                <div class="queueMeta" id="queueMeta">Empty</div>
+              </div>
+              <div id="queueList"></div>
+              <div class="actionsRow" style="margin-top:12px;">
+                <button class="btn primary" id="craftBtn" disabled>CRAFT</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
